@@ -64,18 +64,18 @@ if ($controlIPs === false || in_array($_SERVER['REMOTE_ADDR'], $controlIPs) || P
   {
       $_xhprof['getparam'] = '_profile';
   }
-  
-  if (isset($_GET[$_xhprof['getparam']]))
-  {
-    //Give them a cookie to hold status, and redirect back to the same page
-    setcookie('_profile', $_GET[$_xhprof['getparam']]);
-    $newURI = str_replace(array($_xhprof['getparam'].'=1',$_xhprof['getparam'].'=0'), '', $_SERVER['REQUEST_URI']);
-    header("Location: $newURI");
-    exit;
-  }
-  
-  if (isset($_COOKIE['_profile']) && $_COOKIE['_profile'] 
-          || PHP_SAPI == 'cli' && ( (isset($_SERVER[$envVarName]) && $_SERVER[$envVarName]) 
+
+//  if (isset($_GET[$_xhprof['getparam']]))
+//  {
+//    //Give them a cookie to hold status, and redirect back to the same page
+//    setcookie('_profile', $_GET[$_xhprof['getparam']]);
+//    $newURI = str_replace(array($_xhprof['getparam'].'=1',$_xhprof['getparam'].'=0'), '', $_SERVER['REQUEST_URI']);
+//    header("Location: $newURI");
+//    exit;
+//  }
+
+  if (isset($_COOKIE['_profile']) && $_COOKIE['_profile']
+          || PHP_SAPI == 'cli' && ( (isset($_SERVER[$envVarName]) && $_SERVER[$envVarName])
           || (isset($_ENV[$envVarName]) && $_ENV[$envVarName])))
   {
       $_xhprof['display'] = true;
@@ -86,7 +86,7 @@ if ($controlIPs === false || in_array($_SERVER['REMOTE_ADDR'], $controlIPs) || P
 }
 
 
-//Certain URLs should never have a link displayed. Think images, xml, etc. 
+//Certain URLs should never have a link displayed. Think images, xml, etc.
 foreach($exceptionURLs as $url)
 {
     if (stripos($_SERVER['REQUEST_URI'], $url) !== FALSE)
@@ -94,7 +94,7 @@ foreach($exceptionURLs as $url)
         $_xhprof['display'] = false;
         header('X-XHProf-No-Display: Trueness');
         break;
-    }    
+    }
 }
 unset($exceptionURLs);
 
@@ -106,7 +106,7 @@ foreach ($exceptionPostURLs as $url)
     {
         $_xhprof['savepost'] = false;
         break;
-    }    
+    }
 }
 unset($exceptionPostURLs);
 
@@ -118,7 +118,7 @@ if ($_xhprof['doprofile'] === false && $weight)
     {
         $_xhprof['doprofile'] = true;
         $_xhprof['type'] = 0;
-    } 
+    }
 }
 unset($weight);
 
@@ -149,14 +149,14 @@ unset($domain);
 if ($_xhprof['ext_name'] && $_xhprof['doprofile'] === true) {
     include_once dirname(__FILE__) . '/../xhprof_lib/utils/xhprof_lib.php';
     include_once dirname(__FILE__) . '/../xhprof_lib/utils/xhprof_runs.php';
-    if (isset($ignoredFunctions) && is_array($ignoredFunctions) && !empty($ignoredFunctions)) {   
+    if (isset($ignoredFunctions) && is_array($ignoredFunctions) && !empty($ignoredFunctions)) {
         call_user_func($_xhprof['ext_name'].'_enable', $flagsCpu + $flagsMemory, array('ignored_functions' => $ignoredFunctions));
     } else {
         call_user_func($_xhprof['ext_name'].'_enable', $flagsCpu + $flagsMemory);
     }
     unset($flagsCpu);
     unset($flagsMemory);
-    
+
 }elseif(false === $_xhprof['ext_name'] && $_xhprof['display'] === true)
 {
     $message = 'Warning! Unable to profile run, tideways or xhprof extension not loaded';

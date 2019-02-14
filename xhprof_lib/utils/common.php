@@ -125,3 +125,11 @@ function getFilter($filterName)
     }
     return $serverFilter;
 }
+
+function dd(...$elements) {
+    foreach ($elements as $element) {
+        echo '<pre>' . var_dump($element) . '</pre>';
+    }
+
+    die();
+}
